@@ -26,8 +26,9 @@ const seedDB = async () => {
             description:
                 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, deleniti quasi nihil beatae rerum quidem tempore labore ad porro eius molestiae temporibus architecto, ducimus mollitia nesciunt! Laudantium asperiores nesciunt voluptate!",
             memberships: [{
-                membershipName: 'All Access',
-                price: price
+                memName: 'All Access',
+                memPrice: price,
+                memDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, deleniti quasi nihil beatae rerum quidem tempore labore ad porro eius molestiae temporibus architect",
             }],
         });
         await gym.save();

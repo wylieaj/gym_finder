@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const gymSchema = Schema({
+const gymSchema = new Schema({
     name: String,
     description: String,
     location: String,
     postcode: String,
     memberships: [
         {
-            membershipName: String,
-            price: Number
+            memName: String,
+            memDescription: String,
+            memPrice: Number
         }
     ],
     image: String,

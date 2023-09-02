@@ -21,6 +21,13 @@ app.get('/gyms', async (req, res) => {
     res.render('gyms/index.ejs', {allGyms});
 });
 
+app.get('/gyms/:id', async (req, res) => {
+    const {id} = req.params;
+    const gym = await Gym.findById(id);
+    console.log(gym.memberships[0].memName);
+    res.render('gyms/show.ejs', {gym});
+});
+
 
 app.listen(3000, () => {
     console.log('Listening on port 3000');
