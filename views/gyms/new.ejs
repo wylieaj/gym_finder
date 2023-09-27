@@ -1,0 +1,35 @@
+<%- layout('layouts/boilerplate.ejs') %>
+<div class="row">
+  <div class="col-6 offset-3">
+    <form action="/gyms" method="POST">
+      <div>
+        <!-- NAME -->
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" name="name" id="name" class="form-control" placeholder="Gym Name" />
+        </div>
+        <!-- LOCATION & POSTCODE -->
+        <div class="mb-3">
+          <label for="street" class="form-label">Street</label>
+          <input type="text" name="street" id="street" class="form-control" placeholder="Street Name" />
+          <label for="postcode" class="form-label mt-2">Post Code</label>
+          <input type="text" name="postcode" id="postcode" class="form-control" placeholder="Post Code" />
+        </div>
+        <!-- DESCRIPTION -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea name="description" id="description" cols="30" rows="5" class="form-control" placeholder="Description"></textarea>
+        </div>
+        <!-- IMAGE -->
+        <div class="mb-3">
+          <label for="image" class="form-label">image</label>
+          <input type="text" name="image" id="image" class="form-control" placeholder="https://source.unsplash.com/collection/4974205" />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <button class="btn btn-success">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
