@@ -1,19 +1,24 @@
-<%- layout('layouts/boilerplate.ejs') %> <% for(let gym of allGyms) { %>
-<div class="card mb-3">
-  <div class="row">
-    <div class="col-md-4">
-      <img class="img-fluid" style="width: 400px; height: 300px" alt="" src="<%= gym.image %>" />
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title"><a href="/gyms/<%= gym._id %>" class="text-decoration-none"><%= gym.name %></a></h5>
-        <p class="card-text">
-          <small class="text-secondary"> <%= gym.street %>, <%= gym.postcode %> </small>
-        </p>
-        <p class="card-text"><%= gym.description %></p>
+<%- layout('layouts/boilerplate.ejs') %>
+<div class="row">
+  <% for(let gym of allGyms) { %>
+  <div class="col-8 offset-2">
+    <div class="card mb-3">
+      <div class="row">
+        <div class="col-md-4">
+          <img class="img-fluid" style="width: 300px; height: 250px" alt="" src="<%= gym.image %>" />
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title"><a href="/gyms/<%= gym._id %>" class="text-decoration-none"><%= gym.name %></a></h5>
+            <p class="card-text">
+              <small class="text-secondary"> <%= gym.street %>, <%= gym.postcode %> </small>
+            </p>
+            <p class="card-text"><%= gym.description %></p>
+          </div>
+          <a href="/gyms/<%= gym._id %>" class="btn btn-primary">Details</a>
+        </div>
       </div>
-      <a href="/gyms/<%= gym._id %>" class="btn btn-primary">Details</a>
     </div>
   </div>
+  <% } %>
 </div>
-<% } %>

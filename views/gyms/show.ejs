@@ -3,7 +3,7 @@
 <div class="row">
   <div class="col-8 offset-2">
     <div class="card">
-      <img src="<%=gym.image %>" style="max-width: 100%; max-height: 400px" class="card-img-top" alt="..." />
+      <img src="<%=gym.image %>" class="card-img-top d-block w-100" alt="..." />
       <div class="card-header pt-3 pb-0">
         <h1 class="card-title"><%= gym.name %></h1>
         <h6 class="card-subtitle mb-3 text-body-secondary"><%= gym.street %>, <%= gym.postcode %></h6>
@@ -25,7 +25,9 @@
                 <div class="card-body">
                   <h5 class="card-title"><%= membership.memberships.memName %></h5>
                   <h6 class="card-subtitle mb-2 text-body-secondary">£<%= membership.memberships.memPrice %> per month</h6>
-                  <p class="card-text"><%= membership.memberships.memDescription %></p>
+                  <div class="">
+                    <button class="btn btn-light btn-sm">More</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -35,16 +37,23 @@
           <div class="row">
             <div class="col-4">
               <div class="card">
-                <div class="card-body">
+                <div class="card-body align-text-center">
                   <h5 class="card-title"><%= gym.memberships[0].memName %></h5>
                   <h6 class="card-subtitle mb-2 text-body-secondary">£<%= gym.memberships[0].memPrice %> per month</h6>
-                  <p class="card-text"><%= gym.memberships[0].memDescription %></p>
+                  <div class="">
+                    <button class="btn btn-light btn-sm">More</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <% } %>
+        <form action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
+          <div class="d-grid gap-2">
+            <button class="btn btn-danger">Delete</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
