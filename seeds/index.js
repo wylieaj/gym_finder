@@ -31,6 +31,21 @@ const seedDB = async () => {
           memPrice: price,
           memDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, deleniti quasi nihil beatae rerum quidem tempore labore ad porro eius molestiae temporibus architect",
         },
+        {
+          memName: "Striking Pass",
+          memPrice: price - 20,
+          memDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, deleniti quasi nihil beatae rerum quidem tempore labore ad porro eius molestiae temporibus architect",
+        },
+        {
+          memName: "Grappling Pass",
+          memPrice: price - 20,
+          memDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, deleniti quasi nihil beatae rerum quidem tempore labore ad porro eius molestiae temporibus architect",
+        },
+        {
+          memName: "Gym Pass",
+          memPrice: price - 30,
+          memDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, deleniti quasi nihil beatae rerum quidem tempore labore ad porro eius molestiae temporibus architect",
+        },
       ],
     });
     await gym.save();

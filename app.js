@@ -44,6 +44,23 @@ app.get("/gyms/:id", async (req, res) => {
   res.render("gyms/show.ejs", { gym });
 });
 
+// GET GYM UPDATE FORM
+app.get("/gyms/:id/edit", async (req, res) => {
+  const { id } = req.params;
+  const gym = await Gym.findById(id);
+  res.render("gyms/edit.ejs", { gym });
+});
+
+// UPDATE GYM
+app.put("/gyms/:id", async (req, res) => {
+  const { id } = req.params;
+  const updatedGymData = req.body;
+  const updatedGym = await Gym.findByIdAndUpdate(id, updatedGymData, { new: true });
+  console.log(updatedGym);
+  res.redirect(`/gyms/${id}`);
+});
+
+// DELETE GYM
 app.delete("/gyms/:id", async (req, res) => {
   const { id } = req.params;
   await Gym.findByIdAndDelete(id);

@@ -3,57 +3,69 @@
 <div class="row">
   <div class="col-8 offset-2">
     <div class="card">
-      <img src="<%=gym.image %>" class="card-img-top d-block w-100" alt="..." />
-      <div class="card-header pt-3 pb-0">
-        <h1 class="card-title"><%= gym.name %></h1>
-        <h6 class="card-subtitle mb-3 text-body-secondary"><%= gym.street %>, <%= gym.postcode %></h6>
-      </div>
-      <div class="card-body">
-        <div>
-          <p class="card-text mb-3"><%= gym.description %></p>
+      <img src="<%=gym.image %>" class="card-img-top d-block w-100 h-50" alt="..." />
+      <div class="card-header">
+          <div class="d-flex justify-content-between">
+          <div class="">
+            <h1 class="card-title"><%= gym.name %></h1>
+            <h6 class="card-subtitle text-body-secondary"><%= gym.street %>, <%= gym.postcode %></h6>
+          </div>
+          <div class="my-auto">
+            <div class="btn-group" role="group">
+              <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Actions
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a href="/gyms/<%= gym._id %>/edit" class="dropdown-item text-primary">Edit</a></li>
+                <li>
+                  <form action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
+                    <button class="dropdown-item text-danger">Delete</button>
+                  </form>
+              </li>
+              </ul>
+            </div>
+          </div>
+          </div>  
         </div>
-
-        <!-- CHECK IF THERE IS ANY MEMBERSHIPS IN THE ARRAY -->
-        <% if(gym.memberships[0]) { %>
-        <div class="mb-5">
-          <h2 class="card-text mb-3"><b>Memberships Available</b></h2>
-          <!-- FOR LOOP TO DISPLAY ALL MEMBERSHIPS -->
-          <% if(gym.memberships.length> 1) { %> <% for(let membership of gym.memberships) { %>
-          <div class="row">
-            <div class="col-4">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title"><%= membership.memberships.memName %></h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">£<%= membership.memberships.memPrice %> per month</h6>
-                  <div class="">
-                    <button class="btn btn-light btn-sm">More</button>
+        <div class="card-body">
+          <div>
+            <p class="card-text mb-3"><%= gym.description %></p>
+          </div>
+          <div class="mb-5">
+            <h2 class="card-text mb-3"><b>Memberships Available</b></h2>
+            <div class="row">
+              <!-- CHECK IF THERE IS ANY MEMBERSHIPS IN THE ARRAY -->
+              <% if(gym.memberships[0] && gym.memberships.length> 1) { %>
+              <!-- FOR LOOP TO DISPLAY ALL MEMBERSHIPS -->
+              <% for(let membership of gym.memberships) { %>
+              <div class="col-lg-4 mb-3">
+                <div class="card shadow-sm p-3 bg-body rounded">
+                  <div class="card-body">
+                    <h5 class="card-title"><%= membership.memName %></h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">£<%= membership.memPrice %> per month</h6>
+                    <div class="">
+                      <button class="btn btn-light btn-sm">More</button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <% } %> <% } %>
-          <!-- DISPLAY THE FIRST MEMBERSHIP IN THE ARRAY -->
-          <div class="row">
-            <div class="col-4">
-              <div class="card">
-                <div class="card-body align-text-center">
-                  <h5 class="card-title"><%= gym.memberships[0].memName %></h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">£<%= gym.memberships[0].memPrice %> per month</h6>
-                  <div class="">
-                    <button class="btn btn-light btn-sm">More</button>
+              <% } %> <% } else if(gym.memberships[0]) { %>
+              <!-- DISPLAY THE ONLY MEMBERSHIP IN THE ARRAY-->
+              <div class="col-4">
+                <div class="card shadow-sm p-3 bg-body rounded">
+                  <div class="card-body align-text-center">
+                    <h5 class="card-title"><%= gym.memberships[0].memName %></h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">£<%= gym.memberships[0].memPrice %> per month</h6>
+                    <div class="">
+                      <button class="btn btn-light btn-sm">More</button>
+                    </div>
                   </div>
                 </div>
               </div>
+              <% } %>
             </div>
           </div>
         </div>
-        <% } %>
-        <form action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
-          <div class="d-grid gap-2">
-            <button class="btn btn-danger">Delete</button>
-          </div>
-        </form>
       </div>
     </div>
   </div>
