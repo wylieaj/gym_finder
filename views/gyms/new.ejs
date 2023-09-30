@@ -1,29 +1,29 @@
 <%- layout('layouts/boilerplate.ejs') %>
 <div class="row">
   <div class="col-6 offset-3">
-    <form action="/gyms" method="POST">
+    <form action="/gyms" method="POST" class="validateForm" novalidate>
       <div>
         <!-- NAME -->
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
-          <input type="text" name="name" id="name" class="form-control" placeholder="Gym Name" />
+          <input type="text" name="name" id="name" class="form-control" placeholder="Gym Name" required />
         </div>
         <!-- LOCATION & POSTCODE -->
         <div class="mb-3">
           <label for="street" class="form-label">Street</label>
-          <input type="text" name="street" id="street" class="form-control" placeholder="Street Name" />
+          <input type="text" name="street" id="street" class="form-control" placeholder="Street Name" required />
           <label for="postcode" class="form-label mt-2">Post Code</label>
-          <input type="text" name="postcode" id="postcode" class="form-control" placeholder="Post Code" />
+          <input type="text" name="postcode" id="postcode" class="form-control" placeholder="Post Code" required />
         </div>
         <!-- DESCRIPTION -->
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <textarea name="description" id="description" cols="30" rows="5" class="form-control" placeholder="Description"></textarea>
+          <textarea name="description" id="description" cols="30" rows="5" class="form-control" placeholder="Description" required></textarea>
         </div>
         <!-- IMAGE -->
         <div class="mb-3">
           <label for="image" class="form-label">image</label>
-          <input type="text" name="image" id="image" class="form-control" placeholder="https://source.unsplash.com/collection/4974205" />
+          <input type="text" name="image" id="image" class="form-control" placeholder="https://source.unsplash.com/collection/4974205" required />
         </div>
       </div>
 
@@ -33,3 +33,4 @@
     </form>
   </div>
 </div>
+<script src="/scripts/validateForm.js"></script>

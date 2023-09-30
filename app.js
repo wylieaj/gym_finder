@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const Gym = require("./models/gym");
+const catchAsync = require("./utilities/catchAsync.js");
+const { validateGym } = require("./utilities/middleware/middleware.js");
 
 mongoose.connect("mongodb://127.0.0.1:27017/gym-finder", { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -18,12 +20,16 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static("public"));
 
 // DISPLAY ALL GYMS
-app.get("/gyms", async (req, res) => {
-  const allGyms = await Gym.find({});
-  res.render("gyms/index.ejs", { allGyms });
-});
+app.get(
+  "/gyms",
+  catchAsync(async (req, res) => {
+    const allGyms = await Gym.find({});
+    res.render("gyms/index.ejs", { allGyms });
+  })
+);
 
 // RENDER NEW GYM FORM
 app.get("/gyms/new", (req, res) => {
@@ -31,40 +37,65 @@ app.get("/gyms/new", (req, res) => {
 });
 
 // SUBMIT NEW GYM
-app.post("/gyms", async (req, res) => {
-  const newGym = new Gym(req.body);
-  await newGym.save();
-  res.redirect(`/gyms/${newGym._id}`);
-});
+app.post(
+  "/gyms",
+  validateGym,
+  catchAsync(async (req, res) => {
+    const newGym = new Gym(req.body);
+    await newGym.save();
+    res.redirect(`/gyms/${newGym._id}`);
+  })
+);
 
 // DISPLAY GYM BY ID
-app.get("/gyms/:id", async (req, res) => {
-  const { id } = req.params;
-  const gym = await Gym.findById(id);
-  res.render("gyms/show.ejs", { gym });
-});
+app.get(
+  "/gyms/:id",
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const gym = await Gym.findById(id);
+    res.render("gyms/show.ejs", { gym });
+  })
+);
 
 // GET GYM UPDATE FORM
-app.get("/gyms/:id/edit", async (req, res) => {
-  const { id } = req.params;
-  const gym = await Gym.findById(id);
-  res.render("gyms/edit.ejs", { gym });
-});
+app.get(
+  "/gyms/:id/edit",
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const gym = await Gym.findById(id);
+    res.render("gyms/edit.ejs", { gym });
+  })
+);
 
 // UPDATE GYM
-app.put("/gyms/:id", async (req, res) => {
-  const { id } = req.params;
-  const updatedGymData = req.body;
-  const updatedGym = await Gym.findByIdAndUpdate(id, updatedGymData, { new: true });
-  console.log(updatedGym);
-  res.redirect(`/gyms/${id}`);
-});
+app.put(
+  "/gyms/:id",
+  validateGym,
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const updatedGymData = req.body;
+    const updatedGym = await Gym.findByIdAndUpdate(id, updatedGymData, { new: true });
+    res.redirect(`/gyms/${id}`);
+  })
+);
 
 // DELETE GYM
-app.delete("/gyms/:id", async (req, res) => {
-  const { id } = req.params;
-  await Gym.findByIdAndDelete(id);
-  res.redirect("/gyms");
+app.delete(
+  "/gyms/:id",
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    await Gym.findByIdAndDelete(id);
+    res.redirect("/gyms");
+  })
+);
+
+// ERROR HANDLING
+app.use((err, req, res, next) => {
+  const { statusCode = 500 } = err;
+  if (!err.message) {
+    err.message = "OH NO, Something went wrong :(";
+  }
+  res.status(statusCode).render("error.ejs", { err });
 });
 
 app.listen(3000, () => {
