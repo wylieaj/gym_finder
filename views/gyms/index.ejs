@@ -1,7 +1,7 @@
 <%- layout('layouts/boilerplate.ejs') %>
-<div class="row">
+<div class="row justify-contents-start">
   <% for(let gym of allGyms) { %>
-  <div class="col mb-3">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xxl-3 mb-3">
     <div class="card" style="width: 18rem">
       <img src="<%= gym.image %>" class="card-img-top" alt="..." />
       <div class="card-body">
