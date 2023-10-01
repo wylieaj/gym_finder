@@ -7,7 +7,11 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utilities/ExpressError.js");
+const passport = require("passport");
+const passportLocal = require("passport-local");
 const gymRoutes = require("./routes/gyms.js");
+const authRoutes = require("./routes/auth.js");
+const User = require("./models/user.js");
 
 // CONNECTING TO MONGODB
 mongoose.connect("mongodb://127.0.0.1:27017/gym-finder", { useNewUrlParser: true, useUnifiedTopology: true });
@@ -39,13 +43,23 @@ app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.use(session(sessionOptions));
 app.use(flash());
+
+// PASSPORT
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new passportLocal(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+  res.locals.currentUser = req.user;
   next();
 });
 
 // ROUTES
+app.use("/", authRoutes);
 app.use("/gyms", gymRoutes);
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));

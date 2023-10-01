@@ -2,7 +2,7 @@ const ObjectID = require("mongoose").Types.ObjectId;
 const Gym = require("../models/gym");
 const ExpressError = require("../utilities/ExpressError.js");
 const catchAsync = require("../utilities/catchAsync.js");
-const { validateGym } = require("../utilities/middleware/middleware.js");
+const { validateGym, isLoggedIn, isAdmin } = require("../utilities/middleware/middleware.js");
 const express = require("express");
 const route = express.Router();
 
@@ -16,13 +16,14 @@ route.get(
 );
 
 // RENDER NEW GYM FORM
-route.get("/new", (req, res) => {
+route.get("/new", isAdmin, (req, res) => {
   res.render("gyms/new.ejs");
 });
 
 // SUBMIT NEW GYM
 route.post(
   "/",
+  isAdmin,
   validateGym,
   catchAsync(async (req, res) => {
     const newGym = new Gym(req.body);
@@ -51,6 +52,7 @@ route.get(
 // GET GYM UPDATE FORM
 route.get(
   "/:id/edit",
+  isAdmin,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     if (!ObjectID.isValid(id)) {
@@ -67,6 +69,7 @@ route.get(
 // UPDATE GYM
 route.put(
   "/:id",
+  isAdmin,
   validateGym,
   catchAsync(async (req, res) => {
     const { id } = req.params;
@@ -80,6 +83,7 @@ route.put(
 // DELETE GYM
 route.delete(
   "/:id",
+  isAdmin,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     await Gym.findByIdAndDelete(id);

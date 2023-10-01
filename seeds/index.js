@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const gyms = require("../seeds/gyms");
 const { names } = require("../seeds/seedHelper");
 const Gym = require("../models/gym");
+const User = require("../models/user");
+const passport = require("passport");
 
 mongoose.connect("mongodb://127.0.0.1:27017/gym-finder", { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -49,6 +51,19 @@ const seedDB = async () => {
       ],
     });
     await gym.save();
+
+    await User.deleteMany({});
+    const user = new User({
+      email: "admin@admin.com",
+      isAdmin: true,
+      firstName: "Admin",
+      lastName: "Admin",
+      username: "Admin",
+    });
+
+    const password = "admin";
+
+    await User.register(user, password);
   }
 };
 
