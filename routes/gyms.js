@@ -1,5 +1,6 @@
 const ObjectID = require("mongoose").Types.ObjectId;
 const Gym = require("../models/gym");
+const ExpressError = require("../utilities/ExpressError.js");
 const catchAsync = require("../utilities/catchAsync.js");
 const { validateGym } = require("../utilities/middleware/middleware.js");
 const express = require("express");
