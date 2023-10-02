@@ -29,7 +29,6 @@ module.exports.validateGym = (req, res, next) => {
 
 module.exports.isAdmin = (req, res, next) => {
   if (req.isAuthenticated() && req.user["isAdmin"]) {
-    console.log("THIS USER IS AUTHENTICATED AND AN ADMIN");
     return next();
   }
   req.flash("error", "You don't have authorization to view this content.");
