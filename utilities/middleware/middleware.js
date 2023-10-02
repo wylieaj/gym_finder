@@ -19,14 +19,15 @@ module.exports.validateGym = (req, res, next) => {
 };
 
 // CHECK IF A USER IS AUTHENTICATED
-// module.exports.isLoggedIn = (req, res, next) => {
-//   if (req.isAuthenticated()) {
-//     return next();
-//   }
-//   req.flash("error", "You don't have authorization to view this content.");
-//   res.redirect("/login");
-// };
+module.exports.isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  req.flash("error", "You don't have authorization to view this content.");
+  res.redirect("/login");
+};
 
+// CHECK IF THE CURRENT USER IS AN ADMIN
 module.exports.isAdmin = (req, res, next) => {
   if (req.isAuthenticated() && req.user["isAdmin"]) {
     return next();

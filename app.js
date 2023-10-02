@@ -11,6 +11,7 @@ const passport = require("passport");
 const passportLocal = require("passport-local");
 const gymRoutes = require("./routes/gyms.js");
 const authRoutes = require("./routes/auth.js");
+const dashboardRoutes = require("./routes/dashboard.js");
 const User = require("./models/user.js");
 
 // CONNECTING TO MONGODB
@@ -61,6 +62,7 @@ app.use((req, res, next) => {
 // ROUTES
 app.use("/", authRoutes);
 app.use("/gyms", gymRoutes);
+app.use("/dashboard", dashboardRoutes);
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));
 });
