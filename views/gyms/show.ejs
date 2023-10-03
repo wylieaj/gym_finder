@@ -5,28 +5,11 @@
     <div class="card">
       <img src="<%=gym.image %>" class="card-img-top d-block w-100 h-50" alt="..." />
       <div class="card-header">
-          <div class="d-flex justify-content-between">
           <div class="">
             <h1 class="card-title"><%= gym.name %></h1>
             <h6 class="card-subtitle text-body-secondary"><%= gym.street %>, <%= gym.postcode %></h6>
-          </div>
-          <div class="my-auto">
-            <div class="btn-group" role="group">
-              <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                Actions
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <li><a href="/gyms/<%= gym._id %>/edit" class="dropdown-item text-primary">Edit</a></li>
-                <li>
-                  <form action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
-                    <button class="dropdown-item text-danger">Delete</button>
-                  </form>
-              </li>
-              </ul>
-            </div>
-          </div>
-          </div>  
-        </div>
+          </div> 
+      </div>
         <div class="card-body">
           <div>
             <p class="card-text mb-3"><%= gym.description %></p>

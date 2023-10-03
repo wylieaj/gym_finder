@@ -49,47 +49,4 @@ route.get(
   })
 );
 
-// GET GYM UPDATE FORM
-route.get(
-  "/:id/edit",
-  isAdmin,
-  catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    if (!ObjectID.isValid(id)) {
-      return next(new ExpressError("Sorry, the gym you were looking for cannot be found.", 400));
-    }
-    const gym = await Gym.findById(id);
-    if (!gym) {
-      return next(new ExpressError("Sorry, the gym you were looking for cannot be found.", 404));
-    }
-    res.render("gyms/edit.ejs", { gym });
-  })
-);
-
-// UPDATE GYM
-route.put(
-  "/:id",
-  isAdmin,
-  validateGym,
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const updatedGymData = req.body;
-    const updatedGym = await Gym.findByIdAndUpdate(id, updatedGymData, { new: true });
-    req.flash("success", "Gym updated!");
-    res.redirect(`/gyms/${id}`);
-  })
-);
-
-// DELETE GYM
-route.delete(
-  "/:id",
-  isAdmin,
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    await Gym.findByIdAndDelete(id);
-    req.flash("success", "Gym deleted.");
-    res.redirect("/gyms");
-  })
-);
-
 module.exports = route;

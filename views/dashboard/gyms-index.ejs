@@ -22,7 +22,7 @@
             <div class="dropdown">
               <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>&plus;</span></button>
               <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a href="#" class="dropdown-item text-white">Edit</a></li>
+                <li><a href="/dashboard/gyms/<%= gym._id %>/edit" class="dropdown-item text-white">Edit</a></li>
                 <li>
                   <form action="/dashboard/<%= gym._id %>?_method=DELETE" method="POST">
                     <button class="dropdown-item text-danger">Delete</button>
