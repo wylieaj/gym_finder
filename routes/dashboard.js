@@ -24,7 +24,24 @@ route.get(
   isLoggedIn,
   catchAsync(async (req, res) => {
     const allGyms = await Gym.find({});
-    res.render("dashboard/gyms-index.ejs", { allGyms });
+    res.render("dashboard/dashboard-index.ejs", { allGyms });
+  })
+);
+
+// GET NEW GYM FORM
+route.get("/gyms/new", (req, res) => {
+  res.render("dashboard/dashboard-new.ejs");
+});
+// ADD NEW GYM
+route.post(
+  "/gyms",
+  isAdmin,
+  validateGym,
+  catchAsync(async (req, res) => {
+    const newGym = new Gym(req.body);
+    await newGym.save();
+    req.flash("success", "Your gym has successfully been added.");
+    res.redirect(`/dashboard/gyms`);
   })
 );
 
@@ -42,13 +59,14 @@ route.get(
     if (!gym) {
       return next(new ExpressError("Sorry, the gym you were looking for cannot be found.", 404));
     }
-    res.render("dashboard/edit.ejs", { gym });
+    res.render("dashboard/dashboard-edit.ejs", { gym });
   })
 );
 // UPDATE GYM
 route.put(
   "/gyms/:id",
   isAdmin,
+  validateGym,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const updatedData = req.body;

@@ -2,7 +2,6 @@ const ObjectID = require("mongoose").Types.ObjectId;
 const Gym = require("../models/gym");
 const ExpressError = require("../utilities/ExpressError.js");
 const catchAsync = require("../utilities/catchAsync.js");
-const { validateGym, isLoggedIn, isAdmin } = require("../utilities/middleware/middleware.js");
 const express = require("express");
 const route = express.Router();
 
@@ -11,25 +10,7 @@ route.get(
   "/",
   catchAsync(async (req, res) => {
     const allGyms = await Gym.find({});
-    res.render("gyms/index.ejs", { allGyms });
-  })
-);
-
-// RENDER NEW GYM FORM
-route.get("/new", isAdmin, (req, res) => {
-  res.render("gyms/new.ejs");
-});
-
-// SUBMIT NEW GYM
-route.post(
-  "/",
-  isAdmin,
-  validateGym,
-  catchAsync(async (req, res) => {
-    const newGym = new Gym(req.body);
-    await newGym.save();
-    req.flash("success", "Your gym has successfully been added.");
-    res.redirect(`/gyms/${newGym._id}`);
+    res.render("gyms/gyms-index.ejs", { allGyms });
   })
 );
 
@@ -45,7 +26,7 @@ route.get(
     if (!gym) {
       return next(new ExpressError("Sorry, the gym you were looking for cannot be found.", 404));
     }
-    res.render("gyms/show.ejs", { gym });
+    res.render("gyms/gyms-show.ejs", { gym });
   })
 );
 
