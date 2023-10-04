@@ -1,91 +1,29 @@
-const ObjectID = require("mongoose").Types.ObjectId;
-const Gym = require("../models/gym");
-const User = require("../models/user");
-const ExpressError = require("../utilities/ExpressError.js");
-const catchAsync = require("../utilities/catchAsync.js");
 const { validateGym, isLoggedIn, isAdmin } = require("../utilities/middleware/middleware.js");
+const { storage } = require("../cloudinary");
+const multer = require("multer");
+const upload = multer({ storage });
+const dash = require("../controller/dashboard.js");
 const express = require("express");
 const route = express.Router();
 
 // RETRIEVE THE DASHBOARD
-route.get(
-  "/",
-  isLoggedIn,
-  catchAsync(async (req, res) => {
-    const allGyms = await Gym.find({});
-    const allUsers = await User.find({});
-    res.render("dashboard/dashboard.ejs", { allGyms, allUsers });
-  })
-);
+route.get("/", isLoggedIn, dash.getDashboard);
 
 // DISPLAY ALL GYMS (DASHBOARD)
-route.get(
-  "/gyms",
-  isLoggedIn,
-  catchAsync(async (req, res) => {
-    const allGyms = await Gym.find({});
-    res.render("dashboard/dashboard-index.ejs", { allGyms });
-  })
-);
+route.get("/gyms", isLoggedIn, dash.allGymsList);
 
 // GET NEW GYM FORM
-route.get("/gyms/new", (req, res) => {
-  res.render("dashboard/dashboard-new.ejs");
-});
+route.get("/gyms/new", isAdmin, dash.getNewGymForm);
+
 // ADD NEW GYM
-route.post(
-  "/gyms",
-  isAdmin,
-  validateGym,
-  catchAsync(async (req, res) => {
-    const newGym = new Gym(req.body);
-    await newGym.save();
-    req.flash("success", "Your gym has successfully been added.");
-    res.redirect(`/dashboard/gyms`);
-  })
-);
+route.post("/gyms", isAdmin, upload.array("image"), validateGym, dash.createNewGym);
 
 // GET EDIT FORM
-route.get(
-  "/gyms/:id/edit",
-  isAdmin,
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    console.log(id);
-    if (!ObjectID.isValid(id)) {
-      return next(new ExpressError("Sorry, the gym you were looking for cannot be found.", 400));
-    }
-    const gym = await Gym.findById(id);
-    if (!gym) {
-      return next(new ExpressError("Sorry, the gym you were looking for cannot be found.", 404));
-    }
-    res.render("dashboard/dashboard-edit.ejs", { gym });
-  })
-);
+route.get("/gyms/:id/edit", isLoggedIn, dash.getEditForm);
 // UPDATE GYM
-route.put(
-  "/gyms/:id",
-  isAdmin,
-  validateGym,
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const updatedData = req.body;
-    await Gym.findByIdAndUpdate(id, updatedData);
-    req.flash("success", `${updatedData.name} has been updated!`);
-    res.redirect("/dashboard/gyms");
-  })
-);
+route.put("/gyms/:id", isLoggedIn, upload.array("image"), validateGym, dash.updateGym);
 
 // DELETE GYM
-route.delete(
-  "/:id",
-  isAdmin,
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const gym = await Gym.findByIdAndDelete(id);
-    req.flash("success", `${gym.name} has been deleted.`);
-    res.redirect("/dashboard/gyms");
-  })
-);
+route.delete("/:id", isAdmin, dash.deleteGym);
 
 module.exports = route;

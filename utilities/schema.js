@@ -6,5 +6,8 @@ module.exports.gymSchema = Joi.object({
   description: Joi.string().required(),
   street: Joi.string().required(),
   postcode: Joi.string().required(),
-  image: Joi.string().required(),
+  images: Joi.array().items({
+    url: Joi.string().required(),
+    filename: Joi.string().required(),
+  }),
 });

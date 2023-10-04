@@ -24,7 +24,12 @@ const seedDB = async () => {
       street: `${gyms[seedLocation].street}`,
       postcode: `${gyms[seedLocation].postcode}`,
       name: `${sample(names)}`,
-      image: "https://source.unsplash.com/collection/4974205",
+      images: [
+        {
+          url: "https://res.cloudinary.com/dskmlqboo/image/upload/v1696445618/GymFinder/avbibrvjbsbxnnvpfimy.jpg",
+          filename: "GymFinder/avbibrvjbsbxnnvpfimy",
+        },
+      ],
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, deleniti quasi nihil beatae rerum quidem tempore labore ad porro eius molestiae temporibus architecto, ducimus mollitia nesciunt! Laudantium asperiores nesciunt voluptate!",
       memberships: [
