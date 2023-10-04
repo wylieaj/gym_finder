@@ -3,7 +3,7 @@
   <% for(let gym of allGyms) { %>
   <div class="d-flex justify-content-center mb-3 col-sm-6 col-md-4 col-lg-3 col-xxl-2">
     <div class="card" style="width: 18rem">
-      <img src="<%= gym.image %>" class="card-img-top" alt="..." />
+      <img src="<%= gym.images[0].url %>" class="card-img-top" alt="..." />
       <div class="card-body">
         <h5 class="card-title"><a href="/gyms/<%= gym._id %>" class="text-decoration-none"><%= gym.name %></a></h5>
         <p class="card-text">
