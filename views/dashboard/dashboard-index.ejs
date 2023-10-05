@@ -17,7 +17,7 @@
           <td scope="col"><%= gym.name %></td>
           <td scope="col"><%= gym.street %></td>
           <td scope="col"><%= gym.postcode %></td>
-          <td scope="col"><%= gym.memberships.length %></td>
+          <td scope="col"><a href="/dashboard/gyms/<%= gym._id %>/plans"><%= gym.plans.length %></a></td>
           <td scope="col">
             <div class="dropdown">
               <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>&plus;</span></button>

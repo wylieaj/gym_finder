@@ -15,13 +15,7 @@ const gymSchema = new Schema({
   description: String,
   street: String,
   postcode: String,
-  memberships: [
-    {
-      memName: String,
-      memDescription: String,
-      memPrice: Number,
-    },
-  ],
+  plans: [{ type: mongoose.Schema.Types.ObjectId, ref: "Plan" }],
   images: [imageSchema],
 });
 

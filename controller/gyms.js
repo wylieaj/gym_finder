@@ -15,7 +15,7 @@ module.exports.displayGym = catchAsync(async (req, res, next) => {
   if (!ObjectID.isValid(id)) {
     return next(new ExpressError("Sorry, the gym you were looking for cannot be found.", 400));
   }
-  const gym = await Gym.findById(id);
+  const gym = await Gym.findById(id).populate("plans");
   if (!gym) {
     return next(new ExpressError("Sorry, the gym you were looking for cannot be found.", 404));
   }

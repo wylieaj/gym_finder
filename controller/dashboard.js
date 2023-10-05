@@ -14,7 +14,7 @@ module.exports.getDashboard = catchAsync(async (req, res) => {
 
 // GET LIST OF ALL GYMS ROUTE
 module.exports.allGymsList = catchAsync(async (req, res) => {
-  const allGyms = await Gym.find({});
+  const allGyms = await Gym.find({}).populate("plans");
   res.render("dashboard/dashboard-index.ejs", { allGyms });
 });
 

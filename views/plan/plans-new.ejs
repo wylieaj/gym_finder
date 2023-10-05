@@ -1,0 +1,46 @@
+<%- layout('layouts/boilerplate.ejs') %>
+<div class="row">
+  <div class="col-sm-10 offset-sm-1 col-md-6 offset-md-3">
+    <form action="/dashboard/gyms/<%= gym._id %>/plans" method="POST" class="validateForm" novalidate>
+      <div>
+        <!-- NAME -->
+        <div class="mb-3">
+          <label for="plan-name" class="form-label">Name</label>
+          <input type="text" name="plan[name]" id="plan-name" class="form-control" placeholder="Striking Plan" required />
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="mb-3">
+          <label for="plan-description" class="form-label">Description</label>
+          <textarea name="plan[description]" id="plan-description" cols="30" rows="5" class="form-control" placeholder="Description" required></textarea>
+        </div>
+
+        <!-- PRICE -->
+        <div class="row">
+          <div class="col">
+            <div class="mb-3">
+              <label for="plan-price" class="form-label">Price</label>
+              <input type="number" name="plan[price]" id="plan-price" class="form-control" />
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="plan-type" class="form-label">Period</label>
+              <select name="plan[planType]" id="plan-type" class="form-control">
+                <option value="Class">Per Class</option>
+                <option value="Month">Per Month</option>
+                <option value="Year">Per Year</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <button class="btn btn-success">Submit</button>
+        <a href="/dashboard/gyms/<%= gym._id %>/plans" class="btn btn-danger">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="/scripts/validateForm.js"></script>

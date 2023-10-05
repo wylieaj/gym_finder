@@ -1,7 +1,7 @@
 <%- layout('layouts/boilerplate.ejs') %>
 
 <div class="row">
-  <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+  <div class="col-sm-10 offset-sm-1 col-md-6 offset-md-3">
     <div class="card">
       <div id="imageCarouselFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -33,24 +33,28 @@
             <p class="card-text mb-3"><%= gym.description %></p>
           </div>
           <div class="mb-5">
-            <h2 class="card-text mb-3"><b>Memberships Available</b></h2>
+            <h2 class="card-text mb-3"><b>Plans Available</b></h2>
             <div class="row">
               <!-- IF MORE THAN 1 MEMBERSHIP OR MEMBERSHIP[0]-->
-              <% if(gym.memberships.length> 1 || gym.memberships[0]) { %>
+              <% if(gym.plans.length> 1 || gym.plans[0]) { %>
               <!-- FOR LOOP TO DISPLAY ALL MEMBERSHIPS -->
-              <% for(let membership of gym.memberships) { %>
+              <% for(let plan of gym.plans) { %>
               <div class="mb-3 col-sm-12 col-md-6 col-lg-4 col-xxl-3">
                 <div class="card shadow-sm p-3 bg-body rounded">
                   <div class="card-body">
-                    <h5 class="card-title"><%= membership.memName %></h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">£<%= membership.memPrice %> per month</h6>
-                    <div class="">
+                    <h5 class="card-title mb-3"><%= plan.name %></h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary mb-5"><small>£<%= plan.price %> Per <%= plan.planType %></small></h6>
+                    <div class="d-grid gap-2">
                       <button class="btn btn-light btn-sm">More</button>
                     </div>
                   </div>
                 </div>
               </div>
-              <% } %> <% } %>
+              <% } %> <% } else { %>
+                <div class="mb-3 col-sm-12 col-md-6 col-lg-4 col-xxl-3">
+                      <h5 class="text-secondary">No plans available</h5>
+                </div>
+                <% } %>
             </div>
           </div>
         </div>
