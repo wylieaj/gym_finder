@@ -4,30 +4,28 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Street</th>
-          <th scope="col">Postcode</th>
-          <th scope="col">Plans</th>
+          <th scope="col">Username</th>
+          <th scope="col">Email</th>
+          <th scope="col">Admin?</th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td id="gymAnchorTag" colspan="5" class="text-center text-secondary bg-light">&plus;</td>
+          <td id="userAnchorTag" colspan="4" class="text-center text-secondary bg-light">&plus;</td>
         </tr>
-        <% for(let gym of allGyms) { %>
+
+        <% for(let user of allUsers) { %>
         <tr>
-          <td scope="col"><%= gym.name %></td>
-          <td scope="col"><%= gym.street %></td>
-          <td scope="col"><%= gym.postcode %></td>
-          <td scope="col"><a href="/dashboard/gyms/<%= gym._id %>/plans"><%= gym.plans.length %></a></td>
+          <td scope="col"><%= user.username %></td>
+          <td scope="col"><%= user.email %></td>
+          <td scope="col"><% if(user.isAdmin) { %> &#10003; <% } %></td>
           <td scope="col">
             <div class="dropdown">
               <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>&plus;</span></button>
               <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a href="/dashboard/gyms/<%= gym._id %>/edit" class="dropdown-item text-white">Edit</a></li>
                 <li>
-                  <form action="/dashboard/<%= gym._id %>?_method=DELETE" method="POST">
+                  <form action="/dashboard/users/<%= user._id %>?_method=DELETE" method="POST">
                     <button class="dropdown-item text-danger">Delete</button>
                   </form>
                 </li>

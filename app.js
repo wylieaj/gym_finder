@@ -17,6 +17,7 @@ const gymRoutes = require("./routes/gyms.js");
 const authRoutes = require("./routes/auth.js");
 const dashboardRoutes = require("./routes/dashboard.js");
 const planRoutes = require("./routes/plan.js");
+const usersRoutes = require("./routes/users.js");
 const User = require("./models/user.js");
 
 // CONNECTING TO MONGODB
@@ -69,6 +70,7 @@ app.use("/", authRoutes);
 app.use("/gyms", gymRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/dashboard/gyms", planRoutes);
+app.use("/dashboard/users", usersRoutes);
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));
 });
