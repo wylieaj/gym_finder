@@ -1,6 +1,7 @@
 const ObjectID = require("mongoose").Types.ObjectId;
 const Gym = require("../models/gym");
 const User = require("../models/user");
+const Plan = require("../models/plan");
 const ExpressError = require("../utilities/ExpressError.js");
 const catchAsync = require("../utilities/catchAsync.js");
 const { cloudinary } = require("../cloudinary");
@@ -64,12 +65,19 @@ module.exports.updateGym = catchAsync(async (req, res) => {
   res.redirect("/dashboard/gyms");
 });
 
-// DELETE GYM ROUTE
+// DELETE GYM AND ASSOCIATED PLANS ROUTE
 module.exports.deleteGym = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const gym = await Gym.findByIdAndDelete(id);
-  for (let image of gym.images) {
-    await cloudinary.uploader.destroy(image.filename);
+  const gym = await Gym.findByIdAndDelete(id).populate("plans");
+  if (gym.plans.length >= 1) {
+    for (let plan of gym.plans) {
+      await Plan.findByIdAndDelete(plan._id);
+    }
+  }
+  if (gym.images.length >= 1) {
+    for (let image of gym.images) {
+      await cloudinary.uploader.destroy(image.filename);
+    }
   }
   req.flash("success", `${gym.name} has been deleted.`);
   res.redirect("/dashboard/gyms");

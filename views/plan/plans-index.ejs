@@ -2,6 +2,7 @@
 <div class="row justify-contents-start">
   <% for (let plan of gym.plans) { %>
   <div class="d-flex justify-content-center mb-3 col-sm-6 col-md-4 col-lg-3 col-xxl-2">
+    <form action="/dashboard/gyms/<%= gym._id %>/plans/<%= plan._id %>?_method=DELETE" method="POST">
     <div class="card" style="width: 18rem; height: 18rem">
       <div class="card-header text-center">
         <h5 class="card-title mb-0 py-3"><%= plan.name %></h5>
@@ -9,8 +10,14 @@
       <div class="card-body d-flex align-items-center justify-content-center">
         <p class="mb-0"><%= plan.description %></p>
       </div>
-      <div class="card-footer">
-        <p class="mb-0">£<%= plan.price %> Per <%= plan.planType %></p>
+      <div class="card-footer d-flex justify-content-between align-items-center">
+        <div>
+          <p class="mb-0">£<%= plan.price %> Per <%= plan.planType %></p>
+        </div>
+        <div>
+          <button class="btn btn-danger btn-sm">Delete</button>
+        </div>
+        </form>
       </div>
     </div>
   </div>

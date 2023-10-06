@@ -6,7 +6,6 @@ const catchAsync = require("../utilities/catchAsync.js");
 module.exports.getGymPlans = catchAsync(async (req, res) => {
   const { id } = req.params;
   const gym = await Gym.findById(id).populate("plans");
-  console.log(gym.plans);
   res.render("plan/plans-index.ejs", { gym });
 });
 
@@ -27,5 +26,14 @@ module.exports.createNewPlan = catchAsync(async (req, res) => {
   await plan.save();
   await gym.save();
   req.flash("success", `${plan.name} added to ${gym.name}!`);
+  res.redirect(`/dashboard/gyms/${gym._id}/plans`);
+});
+
+// DELETE PLAN FOR PLANS DB AND FROM GYM ARRAY
+module.exports.deletePlan = catchAsync(async (req, res) => {
+  const { id, planID } = req.params;
+  await Plan.findByIdAndDelete(planID);
+  const gym = await Gym.findByIdAndUpdate(id, { $pull: { plans: planID } });
+  req.flash("success", "Plan deleted!");
   res.redirect(`/dashboard/gyms/${gym._id}/plans`);
 });

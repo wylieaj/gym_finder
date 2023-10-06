@@ -12,4 +12,7 @@ route.get("/:id/plans/new", isAdmin, plan.getNewPlanForm);
 // ADD PLAN TO GYM ROUTE
 route.post("/:id/plans", isAdmin, plan.createNewPlan);
 
+// DELETE PLAN FROM PLAN DB AND ASSOCIATED GYM ROUTE
+route.delete("/:id/plans/:planID", isAdmin, plan.deletePlan);
+
 module.exports = route;
