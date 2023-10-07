@@ -23,7 +23,8 @@ const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 
 // CONNECTING TO MONGODB
-mongoose.connect("mongodb://127.0.0.1:27017/gym-finder", { useNewUrlParser: true, useUnifiedTopology: true });
+const dbUrl = process.env.DBURL || "mongodb://127.0.0.1:27017/gym-finder";
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
@@ -125,6 +126,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error.ejs", { err });
 });
 
-app.listen(3000, () => {
-  console.log("Listening on port 3000");
+app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${process.env.PORT}`);
 });
