@@ -1,17 +1,39 @@
 <%- layout('layouts/boilerplate.ejs') %>
+<div class="d-flex justify-content-center mb-3">
+  <div id="cluster-map" class=""></div>
+</div>
+<div class="row">
+  <div class="col-sm-10 offset-sm-1 col-md-6 offset-md-3">
+    <form action="/gyms" method="GET" class="form-inline mb-3">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" name="search" placeholder="City search..." aria-label="city-search" aria-describedby="city-search" />
+        <button class="btn btn-outline-secondary" type="submit" id="city-search">Search</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<% if(gyms.length>0) { %>
 <div class="row justify-contents-start">
-  <% for(let gym of allGyms) { %>
+  <% for(let gym of gyms) { %>
   <div class="d-flex justify-content-center mb-3 col-sm-6 col-md-4 col-lg-3 col-xxl-2">
     <div class="card" style="width: 18rem">
       <img src="<%= gym.images[0].url %>" class="card-img-top" alt="..." />
       <div class="card-body">
         <h5 class="card-title"><a href="/gyms/<%= gym._id %>" class="text-decoration-none"><%= gym.name %></a></h5>
         <p class="card-text">
-          <small class="text-secondary"> <%= gym.street %>, <%= gym.postcode %> </small>
+          <small class="text-secondary"> <%= gym.city %>, <%= gym.postcode %> </small>
         </p>
-        <p class="card-text"><%= gym.description %></p>
       </div>
     </div>
   </div>
-  <% } %>
+  <% } %> <% } else { %> <% } %>
 </div>
+<script>
+  <% if(gyms.length > 0) { %>
+  const gyms = <%- JSON.stringify(gyms) %>
+  <% } else { %>
+    const gyms = <%- JSON.stringify(allGyms) %>
+  <% } %>
+</script>
+<script src="/scripts/clusterMap.js"></script>

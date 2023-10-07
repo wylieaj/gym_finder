@@ -13,8 +13,19 @@ imageSchema.virtual("thumbnail").get(function () {
 const gymSchema = new Schema({
   name: String,
   description: String,
-  street: String,
+  city: String,
   postcode: String,
+  geometry: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  },
   plans: [{ type: mongoose.Schema.Types.ObjectId, ref: "Plan" }],
   images: [imageSchema],
 });

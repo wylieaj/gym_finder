@@ -5,7 +5,7 @@
       <thead>
         <tr>
           <th scope="col">Name</th>
-          <th scope="col">Street</th>
+          <th scope="col">City</th>
           <th scope="col">Postcode</th>
           <th scope="col">Plans</th>
           <th scope="col"></th>
@@ -18,7 +18,7 @@
         <% for(let gym of allGyms) { %>
         <tr>
           <td scope="col"><%= gym.name %></td>
-          <td scope="col"><%= gym.street %></td>
+          <td scope="col"><%= gym.city %></td>
           <td scope="col"><%= gym.postcode %></td>
           <td scope="col"><a href="/dashboard/gyms/<%= gym._id %>/plans"><%= gym.plans.length %></a></td>
           <td scope="col">

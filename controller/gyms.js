@@ -5,8 +5,16 @@ const catchAsync = require("../utilities/catchAsync.js");
 
 // DISPLAY ALL GYMS - NO LOGIN
 module.exports.displayAllGyms = catchAsync(async (req, res) => {
-  const allGyms = await Gym.find({});
-  res.render("gyms/gyms-index.ejs", { allGyms });
+  if (req.query.search) {
+    const regex = new RegExp(escapeRegex(req.query.search), "gi");
+    const gyms = await Gym.find({ city: regex });
+    const allGyms = await Gym.find({});
+    res.render("gyms/gyms-index.ejs", { gyms, allGyms });
+  } else {
+    const allGyms = await Gym.find({});
+    const gyms = [];
+    res.render("gyms/gyms-index.ejs", { gyms, allGyms });
+  }
 });
 
 // DISPLAY SPECIFIC GYM - NO LOGIN
@@ -21,3 +29,7 @@ module.exports.displayGym = catchAsync(async (req, res, next) => {
   }
   res.render("gyms/gyms-show.ejs", { gym });
 });
+
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}

@@ -2,6 +2,7 @@ const ObjectID = require("mongoose").Types.ObjectId;
 const Gym = require("../models/gym");
 const User = require("../models/user");
 const Plan = require("../models/plan");
+const axios = require("axios");
 const ExpressError = require("../utilities/ExpressError.js");
 const catchAsync = require("../utilities/catchAsync.js");
 const { cloudinary } = require("../cloudinary");
@@ -26,11 +27,17 @@ module.exports.getNewGymForm = (req, res) => {
 
 // CREATE NEW GYM ROUTE
 module.exports.createNewGym = catchAsync(async (req, res) => {
+  const locationCoordinates = await axios.get(`https://api.geoapify.com/v1/geocode/search?text=${req.body.postcode}&apiKey=${process.env.GEOAPIFY_API_KEY}`);
+  const {
+    features: [{ geometry }],
+  } = locationCoordinates.data;
   const newGym = new Gym(req.body);
   newGym.images = req.files.map((f) => ({
     url: f.path,
     filename: f.filename,
   }));
+  newGym.geometry = geometry;
+  console.log(newGym);
   await newGym.save();
   req.flash("success", "Your gym has successfully been added.");
   res.redirect(`/dashboard/gyms`);
@@ -53,6 +60,10 @@ module.exports.getEditForm = catchAsync(async (req, res) => {
 // UPDATE GYM ROUTE
 module.exports.updateGym = catchAsync(async (req, res) => {
   const { id } = req.params;
+  const locationCoordinates = axios.get(`https://api.geoapify.com/v1/geocode/search?text=${req.body.postcode}&apiKey=${process.env.GEOAPIFY_API_KEY}`);
+  const {
+    features: [{ geometry }],
+  } = locationCoordinates.data;
   const updatedData = req.body;
   const updatedGym = await Gym.findByIdAndUpdate(id, updatedData);
   const newImg = req.files.map((f) => ({
@@ -60,6 +71,7 @@ module.exports.updateGym = catchAsync(async (req, res) => {
     filename: f.filename,
   }));
   updatedGym.images.push(...newImg);
+  updatedGym.geometry = geometry;
   await updatedGym.save();
   req.flash("success", `${updatedData.name} has been updated!`);
   res.redirect("/dashboard/gyms");
