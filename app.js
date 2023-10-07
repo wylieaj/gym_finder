@@ -19,6 +19,8 @@ const dashboardRoutes = require("./routes/dashboard.js");
 const planRoutes = require("./routes/plan.js");
 const usersRoutes = require("./routes/users.js");
 const User = require("./models/user.js");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
 
 // CONNECTING TO MONGODB
 mongoose.connect("mongodb://127.0.0.1:27017/gym-finder", { useNewUrlParser: true, useUnifiedTopology: true });
@@ -28,27 +30,65 @@ db.once("open", () => {
   console.log("Database connection established!");
 });
 
+// SETUP
 // SESSION OPTIONS
 const sessionOptions = {
   name: "session",
-  secret: "developmentSecret",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
+    // secure: true,
     maxAge: 1000 * 60 * 60 * 24 * 7,
     expires: Date.now() * 1000 * 60 * 60 * 24 * 7,
   },
 };
+app.use(session(sessionOptions));
 
-//MIDDLEWARES
+// EJS
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(express.static("public"));
+
+// FORMS SETUP
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-app.use(express.static("public"));
-app.use(session(sessionOptions));
+app.use(mongoSanitize());
+
+// HELMET
+app.use(helmet());
+const scriptSrcUrls = ["https://unpkg.com/", "https://cdn.jsdelivr.net/", "https://kit.fontawesome.com/", "https://cdnjs.cloudflare.com/"];
+const styleSrcUrls = [, "https://unpkg.com/", "https://cdn.jsdelivr.net/", "https://kit-free.fontawesome.com/", "https://fonts.googleapis.com/", "https://use.fontawesome.com/"];
+const connectSrcUrls = ["https://unpkg.com/", "https://res.cloudinary.com/", "https://events.mapbox.com/"];
+const fontSrcUrls = [];
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", "blob:"],
+      objectSrc: [],
+      imgSrc: [
+        "'self'",
+        "blob:",
+        "data:",
+        "https://res.cloudinary.com/dskmlqboo/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
+        "https://images.unsplash.com/",
+        "https://unpkg.com/",
+        "https://a.tile.openstreetmap.org/",
+        "https://b.tile.openstreetmap.org/",
+        "https://c.tile.openstreetmap.org/",
+      ],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
+  })
+);
+
+// FLASH
 app.use(flash());
 
 // PASSPORT
@@ -58,6 +98,7 @@ passport.use(new passportLocal(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// FLASH & CURRENT USER
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");

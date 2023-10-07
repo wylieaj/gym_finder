@@ -37,7 +37,6 @@ module.exports.createNewGym = catchAsync(async (req, res) => {
     filename: f.filename,
   }));
   newGym.geometry = geometry;
-  console.log(newGym);
   await newGym.save();
   req.flash("success", "Your gym has successfully been added.");
   res.redirect(`/dashboard/gyms`);
@@ -46,7 +45,6 @@ module.exports.createNewGym = catchAsync(async (req, res) => {
 // GET EDIT GYM FORM ROUTE
 module.exports.getEditForm = catchAsync(async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   if (!ObjectID.isValid(id)) {
     return next(new ExpressError("Sorry, the gym you were looking for cannot be found.", 400));
   }
@@ -60,7 +58,7 @@ module.exports.getEditForm = catchAsync(async (req, res) => {
 // UPDATE GYM ROUTE
 module.exports.updateGym = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const locationCoordinates = axios.get(`https://api.geoapify.com/v1/geocode/search?text=${req.body.postcode}&apiKey=${process.env.GEOAPIFY_API_KEY}`);
+  const locationCoordinates = await axios.get(`https://api.geoapify.com/v1/geocode/search?text=${req.body.postcode}&apiKey=${process.env.GEOAPIFY_API_KEY}`);
   const {
     features: [{ geometry }],
   } = locationCoordinates.data;

@@ -12,7 +12,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "GymFinder",
+    folder: `GymFinder`,
     allowedFormats: ["jpg", "png", "jpeg"],
   },
 });
