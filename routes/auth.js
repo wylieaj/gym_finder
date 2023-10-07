@@ -9,6 +9,7 @@ route.get("/login", (req, res) => {
 });
 // LOGIN USER
 route.post("/login", passport.authenticate("local", passportOptions), (req, res) => {
+  console.log(req.user);
   req.flash("success", "User logged in!");
   res.redirect("/dashboard");
 });

@@ -21,14 +21,11 @@ const usersRoutes = require("./routes/users.js");
 const User = require("./models/user.js");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
-const MongoStore = require("connect-mongo");
+const MongoStore = require("connect-mongo")(session);
 
 // CONNECTING TO MONGODB
-if (process.env.NODE_ENV !== "production") {
-  dbUrl = "mongodb://127.0.0.1:27017/gym-finder";
-} else {
-  dbUrl = process.env.DBURL;
-}
+
+const dbUrl = process.env.DBURL || "mongodb://127.0.0.1:27017/gym-finder";
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 console.log(dbUrl);
 const db = mongoose.connection;
@@ -39,11 +36,9 @@ db.once("open", () => {
 
 // MONGOSTORE
 const secret = process.env.SESSION_SECRET;
-const store = MongoStore.create({
-  mongoUrl: dbUrl,
-  crypto: {
-    secret: secret,
-  },
+const store = new MongoStore({
+  url: dbUrl,
+  secret,
   touchAfter: 24 * 3600,
 });
 store.on("error", function (err) {
