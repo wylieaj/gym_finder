@@ -21,11 +21,16 @@ const usersRoutes = require("./routes/users.js");
 const User = require("./models/user.js");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
-const MongoStore = require("connect-mongo")(session);
+const MongoStore = require("connect-mongo");
 
 // CONNECTING TO MONGODB
-const dbUrl = process.env.DBURL || "mongodb://127.0.0.1:27017/gym-finder";
+if (process.env.NODE_ENV !== "production") {
+  dbUrl = "mongodb://127.0.0.1:27017/gym-finder";
+} else {
+  dbUrl = process.env.DBURL;
+}
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+console.log(dbUrl);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
@@ -34,9 +39,11 @@ db.once("open", () => {
 
 // MONGOSTORE
 const secret = process.env.SESSION_SECRET;
-const store = new MongoStore({
-  url: dbUrl,
-  secret,
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: {
+    secret: secret,
+  },
   touchAfter: 24 * 3600,
 });
 store.on("error", function (err) {
@@ -139,6 +146,12 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error.ejs", { err });
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Listening on port ${process.env.PORT}`);
+// LISTENING PORT
+if (process.env.NODE_ENV !== "production") {
+  port = 3000;
+} else {
+  port = process.env.PORT;
+}
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });
