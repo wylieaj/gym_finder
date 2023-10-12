@@ -1,4 +1,4 @@
-const map = L.map("cluster-map").setView([55.0, -3.436], 6);
+const map = L.map("cluster-map").setView([56.5, -3.436], 6);
 console.log(gyms);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,

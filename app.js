@@ -123,6 +123,9 @@ app.use((req, res, next) => {
 });
 
 // ROUTES
+app.get("/", (req, res) => {
+  res.render("home.ejs");
+});
 app.use("/", authRoutes);
 app.use("/gyms", gymRoutes);
 app.use("/dashboard", dashboardRoutes);
